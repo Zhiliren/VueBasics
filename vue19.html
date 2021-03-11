@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>悦听音乐</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-decoration:none;
+    }
+    #app{
+        margin: 0 auto;
+    }
+    #app,header,.playBox{
+        width: 872px;
+    }
+    header{
+        height: 66px;
+        background-color: #1eacda;
+    }
+    header .logo{
+        float: left;
+        margin-left: 24px;
+        line-height: 66px;
+        color: #fff;
+    }
+    header .inputBox{
+        float: right;
+        margin-right: 24px;
+    }
+    header .inputBox input{
+        width: 332px;
+        height: 40px;
+        border-radius:18px;
+        background-color: #83d1eb;
+        border: none;
+        margin-top: 13px;
+        text-indent: 20px;
+    }
+    header .inputBox input:focus{
+        outline: none;
+    }
+    /*内容部分*/
+    .contentBox{
+        overflow: hidden;
+        background-color: #deceb1;
+    }
+    .contentBox .content_Left,.contentBox .content_Middle{
+        float: left;
+    }
+    .contentBox .content_Left,.contentBox .content_Right{
+        width: 190px;
+        height: 432px;
+        padding: 12px;
+    }
+    .contentBox .content_Left{
+        overflow-y:scroll;
+        border-right: 1px solid #494949;
+    }
+      /*隐藏content_Left滚动条*/
+      .contentBox .content_Left::-webkit-scrollbar{
+        display: none;
+    }
+    .contentBox .content_Left .music_list li{
+        width: 188px;
+        height: 44px;
+        line-height: 44px;
+        background-color: #fff;
+        font-size: 14px;
+        color: #000;
+        opacity:0.5;
+        margin-top: 6px;
+    }
+    .contentBox .content_Middle div{
+        width: 278px;
+        height: 278px;
+        display: inline-block;
+        margin-left: 77px;
+        margin-top: 77px;
+        border-radius: 50%;
+        background-color: burlywood;
+    }
+    .contentBox .content_Middle div img{
+        width: 150px;
+        height: 150px;
+        margin: 64px 0 0 64px;
+        border-radius: 50%;
+    }
+    .contentBox .content_Right{
+        float: right;
+        border-left: 1px solid #494949;
+    }
+    .contentBox .content_Right .comment_Box{
+        height: 410px;
+        overflow-y:scroll;
+        margin: 6px 0;
+    }
+     /*隐藏comment_Box滚动条*/
+    .contentBox .content_Right .comment_Box::-webkit-scrollbar{
+        display: none;
+    }
+    .contentBox .content_Right .comment_Box li{
+        width: 187px;
+        overflow: hidden;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+    .contentBox .content_Right .comment_Box li div span{
+        color: #000;
+    }
+    .contentBox .content_Right .comment_Box li div p{
+        color: #707070;
+        margin-left: 48px;
+    }
+    .contentBox .content_Right .comment_Box li div img{
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        vertical-align:middle;
+    }
+    /* .contentBox .content_Left .music_list{} */
+    /*播放部分*/
+    .playBox{
+        height: 56px;
+        background-color: #f1f3f4;
+    }
+    .playBox audio{
+        width: 860px;
+    }
+</style>
+<body>
+        <div id="app">
+            <!-- 头部 -->
+            <header>
+                    <div class="logo">
+                        <h3>悦听</h3>
+                    </div>
+                    <div class="inputBox">
+                            <div>
+                                <input type="text" v-model="query" @keyup.enter="queryClick()">
+                                <span>搜索</span>
+                            </div>
+                    </div>
+            </header>
+            <!-- 内容部分 -->
+            <div class="contentBox">
+                <div class="content_Left">
+                    <ul class="music_list">
+                        <li v-for="item in musicList" @click="playMusic(item.id)">
+                            <div>
+                                {{item.name}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content_Middle">
+                    <div>
+                        <img :src="musicCover" alt="" srcset="" v-if="isPlaying">
+                    </div>
+                        
+                </div>
+
+                <div class="content_Right">
+                    <h4>热门评论</h4>
+                    <ul class="comment_Box">
+                        <li v-for="(item,index) in hotComment">
+                            <div>
+                                <img :src="item.user.avatarUrl" alt="" srcset="">
+                                <span>{{item.user.nickname}}</span>
+                                <p>{{item.content}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 播放 -->
+            <div class="playBox">
+                <audio controls="controls" :src="musicUrl"></audio>
+            </div>
+        </div>
+</body>
+<script>
+    /*
+    1:歌曲搜索接口
+        请求地址:https://autumnfish.cn/search
+        请求方法:get
+        请求参数:keywords(查询关键字)
+        响应内容:歌曲搜索结果
+	
+	2:歌曲url获取接口
+	    请求地址:https://autumnfish.cn/song/url
+	    请求方法:get
+	    请求参数:id(歌曲id)
+	    响应内容:歌曲url地址
+		
+	3.歌曲详情获取
+		请求地址:https://autumnfish.cn/song/detail
+		请求方法:get
+		请求参数:ids(歌曲id)
+		响应内容:歌曲详情(包括封面信息)
+		
+	4.热门评论获取
+	    请求地址:https://autumnfish.cn/comment/hot?type=0
+	    请求方法:get
+	    请求参数:id(歌曲id,地址中的type固定为0)
+	    响应内容:歌曲的热门评论
+		
+	5.mv地址获取
+	    请求地址:https://autumnfish.cn/mv/url
+	    请求方法:get
+	    请求参数:id(mvid,为0表示没有mv)
+	    响应内容:mv的地址
+    */
+        var vue = new Vue({  
+            el:'#app',
+            data:{
+                //查询输入框：关键字
+                query:"",
+                //搜索到所有歌曲
+                musicList:[],
+                //搜索歌曲地址
+                musicUrl:"",
+                //获取歌曲封面
+                musicCover:"",
+                //热门评论
+                hotComment:[],
+                //播放状态
+                isPlaying:false,
+            },
+            methods:{
+                //查询输入关键字
+                queryClick(){
+                    var that = this
+                    axios.get("https://autumnfish.cn/search?keywords="+ this.query).then(function(res){
+                        // console.log(res)
+                        // console.log(res.data.result.songs)
+                        that.musicList = res.data.result.songs
+                        // console.log(that.musicList)
+                    },function(err){
+                        // console.log(err)
+                    })
+                },
+                //音乐播放
+                playMusic(id){
+                   this.id = id
+                   var that = this
+                   axios.get("https://autumnfish.cn/song/url?id="+ this.id).then(function(res){
+                        that.musicUrl = res.data.data[0].url
+                    },function(err){
+                    })
+
+                //获取封面
+                axios.get("https://autumnfish.cn/song/detail?ids="+ this.id).then(function(res){
+                    //    console.log(res)
+                    that.musicCover = res.data.songs[0].al.picUrl
+                    // console.log(that.musicCover)
+                    },function(err){
+                    })
+                this.isPlaying = true
+
+                //获取评论
+                axios.get("https://autumnfish.cn/comment/hot?type=0&id="+ this.id).then(function(res){
+                       console.log(res)
+                    // console.log(res.data.hotComments[0].content)
+                        that.hotComment = res.data.hotComments
+                        console.log(that.hotComment[0].user.nickname)
+                    },function(err){
+                    })
+                }
+
+            }
+        })
+</script>
+</html>

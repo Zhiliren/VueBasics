@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>el挂载点正确使用</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            {{message}}
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            // el:'#app',//id选择器
+            // el:'.app',//类选择器
+            // el:'div',//标签选择器
+            el:'#body',//不能使用html或body
+            data:{
+                message:'Hello VUE'
+            }
+        })
+</script>
+</html>

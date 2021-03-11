@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小案例计时器</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<body>
+        <div id="app">
+            <button @click="sub">-</button>
+                <span v-text="num"></span>
+            <button @click="add">+</button>
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                num:0
+            },
+            methods:{
+                sub(){
+                    if(this.num>0){
+                        this.num--
+                    }else{
+                        alert("不能再减了，已最少值")
+                    }
+                },
+                add(){
+                    if(this.num<10){
+                        this.num++
+                    }else{
+                        alert("不能再加了，已最大值")
+                    }
+                }
+            }
+        })
+</script>
+</html>

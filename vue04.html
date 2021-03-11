@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-text</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            <!-- 以下三种写法是等价 -->
+            <h1 v-text="message + 'No1'"></h1>
+            <h1>{{message}}No1</h1>
+            <!-- 双大括号里只识别data数据 其他想添加数据使用单双引号-->
+            <h1>{{message + 'No1'}}</h1>
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                message:'中国'
+            }
+        })
+</script>
+</html>

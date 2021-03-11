@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-show</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            <img src="img/wonder.gif" v-show="wonder" > <br>
+            <input type="button" value="惊讶从点击开始" @click="clickBeauty">
+            <br>
+            <span v-text="ges + '岁'"></span><br>
+            <input type="button" value="增加岁数" @click="clickGes"><br>
+            <img src="img/wonder.gif" v-show="ges>=20"> 
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                wonder:false,
+                ges:18
+            },
+            methods:{
+                clickBeauty(){
+                    //默认是false再次点击true
+                    this.wonder = !this.wonder
+                },
+                clickGes(){
+                    this.ges++;
+                }
+            }
+        })
+</script>
+</html>

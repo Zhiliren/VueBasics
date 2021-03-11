@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-if v-else</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            <input type="button" value="切换显示" @click="changeIsShow">
+            <div v-if="isShon" v-text="name"></div>
+            <div v-show="isShon" v-text="name"></div>
+            
+            <input type="button" value="增加温度" @click="addTemperature">
+            <input type="button" value="降低温度" @click="reduceTemperature">
+            <div v-if="temperature<10">
+                <p> 冷了！</p>
+                <p v-text="temperature"></p>
+            </div>
+            <div v-else="temperature">
+                <p> 热了！</p>
+                <p v-text="temperature"></p>
+            </div>
+
+            <!-- 案例1 -->
+
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                name:'乌石大唐集团',
+                isShon:false,
+                temperature:-30
+            },
+            methods:{
+                changeIsShow(){
+                    this.isShon =! this.isShon
+                },
+                addTemperature(){
+                    this.temperature +=10
+                },
+                reduceTemperature(){
+                    this.temperature -=10
+                }
+            }
+        })
+</script>
+</html>

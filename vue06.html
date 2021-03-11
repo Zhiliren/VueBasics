@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-on</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            <input type="text" value="v-on指令" v-on:click="doIt">
+            <input type="text" value="v-on简写" @click="doIt">
+            <input type="text" value="v-on双击" v-on:dblclick="doIt">
+
+            <h2>{{food}}</h2>
+            <input type="button" value="点击修改食物" @click="changeFood">
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                food:'西红柿蛋炒饭',
+            },
+            //逻辑方法
+            //方法内部通过this关键字可以访问定义在data中数据
+            methods:{
+                doIt(){
+                    alert("做IT")
+                },
+                changeFood(){
+                    if(this.food == "蛋炒饭"){
+                        this.food = "西红柿蛋炒饭"
+                    }else{
+                        this.food = "蛋炒饭"
+                    }
+                }
+            }
+        })
+</script>
+</html>

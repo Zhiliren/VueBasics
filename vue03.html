@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>data数据对象</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+        <div id="app">
+            {{message}}
+            
+            <!-- 在data数据存放user对象 -->
+            <h1>
+                名字：{{user.name}} {{user.ges}}
+            </h1>
+            <!-- 在data数据存放campus数组 -->
+            <ul>
+                <li>{{campus[0]}}</li>
+                <li>{{campus[1]}}</li>
+                <li>{{campus[2]}}</li>
+                <li>{{campus[3]}}</li>
+            </ul>
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                message:'Hello VUE',//数据为字符串
+                user:{//数据为对象
+                        name:'力猿君',
+                        ges:25 + '岁'
+                    },
+                    campus:["北京","上海","广州","深圳"]//数据为数组
+                
+            }
+        })
+</script>
+</html>

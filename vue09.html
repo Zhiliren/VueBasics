@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-bind</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<style>
+    .active {
+        border: 1px solid red;
+    }
+    .guangcss{
+        font-size: 30px;
+    }
+</style>
+<body>
+        <div id="app">
+            <button @click="classObject">谁是光仔?</button><br>
+            <img v-if="isActive" v-bind:src="imgSrc" v-bind:title="'大家好我是'+name" v-bind:class="{active:isActive}">
+            <p v-if="isGuang" v-text="'大家好我是'+name" v-bind:class="{guangcss:isGuang}"></p>
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                imgSrc:"./img/Guangzi.png",
+                name:'光仔',
+                isActive:false,
+                isGuang:false
+            },
+            methods:{
+                classObject(){
+                    this.isActive =! this.isActive
+                    this.isGuang =! this.isGuang 
+                },
+            }
+        })
+</script>
+</html>

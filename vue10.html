@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE文本指令：v-for</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<style>
+    
+</style>
+<body>
+        <div id="app">
+            <input type="button" value="增加菜谱" @click="add">
+            <input type="button" value="增少菜谱" @click="reduce">
+            <ul>
+                <li v-for="cit in city"> 城市： {{cit}}</li>
+            </ul>
+            <ul>
+                <li v-for="men in menu" :key="men.id">{{men.name}} {{men.money}}元</li>
+            </ul>
+            <h2 v-for="country in country">{{country}}</h2>
+        </div>
+</body>
+<script>
+        var vue = new Vue({ 
+            el:'#app',
+            data:{
+                city:["北京","上海","广州","深圳"],
+                country:["中国","韩国","日本","泰国","越南"],
+                addmenu:{
+                    name:"白米饭",
+                    money:2
+                },
+                menu:[
+                    {
+                        id:0,
+                        name:"西红柿炒蛋",
+                        money:26
+                    },
+                    {
+                        id:1,
+                        name:"炒农家青菜",
+                        money:30
+                    },
+                    {
+                        id:3,
+                        name:"红烧肉",
+                        money:38
+                    },
+                    {
+                        id:4,
+                        name:"水煮鱼",
+                        money:36
+                    },
+                ]
+            },
+            methods:{
+                add(){
+                    this.country.push("印度");//新增
+                },
+                reduce(){
+                    this.country.shift();//移除country数组左边的一个元素
+                }
+            }
+        })
+</script>
+</html>

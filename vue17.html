@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记本添加删除</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    #app{
+        margin: 0 auto;
+        width: 560px;
+        height: 200px;
+        background-color: beige;
+    }
+    .box{
+        border: 1px solid slategrey;
+        padding: 10px;
+    }
+</style>
+<body>
+        <div id="app">
+            <h1>小黑笔记</h1>
+            <div class="box">
+                <input type="text" v-model="content" @keyup.enter="addContent">
+                <br>
+                <ol>
+                    <li v-for="(item,index) in interest">
+                            <label>{{index+1}}.{{item}}</label><button @click="getRid(index)">x</button>
+                    </li>
+                </ol>
+                <button @click="allClear">清除数据</button>
+            </div>
+        </div>
+</body>
+<script>
+    /*
+        1.在表单添加数据 使用到v-model指令
+        2.在表单添加事件 使用到@keyup.enter回车键事件
+        3.标签渲染interest数组 使用到v-for指令，如想拿到interest数组里的索引值(item,index) in interest
+        4.在每个索引值添加v-on事件
+        业务逻辑：添加数据、删除数据、全部删除
+    */
+        var vue = new Vue({  
+            el:'#app',
+            data:{
+                content:"",
+                interest:[
+                    "打游戏",
+                    "学习",
+                    "打篮球",
+                    "玩手机"
+                ]
+            },
+            methods:{
+                addContent(){
+                    this.interest.push(this.content)
+                    this.content =""
+                },
+                getRid(index){
+                    // alert(this.interest[index])
+                    this.interest.splice(index,1)
+                },
+                allClear(){
+                    this.interest.splice(this.interest)
+                    // this.interest.splice(0,this.interest.length)
+                }
+            }
+        })
+</script>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气预报</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-decoration:none;
+    }
+    #app{
+        width: 870px;
+        height: 448px;
+        margin: 0 auto;
+    }
+    .logo{
+        padding: 20px 326px;
+        /* margin-left: 350px; */
+    }
+    .box{
+        width: 702px;
+        margin: 0 auto;
+    }
+    .box .inputBox{
+        width: 562px;
+        height: 40px;
+        border: 1px solid #41a1cb;
+        outline: none;
+        padding: 0px 15px;
+    }
+    .box .search{
+        width: 102px;
+        height: 42px;
+        background-color: #41a1cb;
+        padding: 4px 15px;
+        color: #fff;
+        border: none;
+    }
+    .box ul{
+        margin-top: 10px;
+        overflow: hidden;
+    }
+    .box ul li{
+        float: left;
+        margin-left: 20px;
+    }
+    .box ul li:nth-child(1){
+        margin-left: 0px;
+    }
+    .box ul li span{
+        color: black;
+    }
+    .box ul li span:hover{
+        color: #fda761;
+    }
+    .weather_list{
+        margin-top: 56px;
+        overflow: hidden;
+    }
+    .weather_list li{
+        float: left;
+        margin-left: 22px;
+    }
+    .weather_list li:nth-child(1){
+        margin-left: 0;
+    }
+    .weather_list li h2,.weather_list li div,.weather_list li p{
+        text-align: center;
+        margin-top: 20px;
+    }
+    .weather_list li h2,.weather_list li div{
+        color: #fda761;
+    }
+    .weather_list li p{
+        color: #717171;
+    }
+</style>
+<body>
+        <div id="app">
+            
+                <img :src="weatherLogo" alt="" srcset="" class="logo">
+            
+            <div class="box">
+                <input class="inputBox" type="text" v-model="city" @keyup.enter="search">
+                <button class="search" @click="search">搜索</button>
+                <ul>
+                    <li v-for="(item,index) in fixedCity">
+                        <span @click="changeCity(index)">{{item}}</span>
+                    </li>
+                </ul>
+            </div>
+            <ul class="weather_list">
+                    <li v-for="(list,index) in weather">
+                            <h2>{{list.type}}</h2>
+                            <div>
+                                <span>{{list.low}}</span>~<span>{{list.high}}</span>
+                            </div>
+                            <p>{{list.date}}</p>
+                    </li>
+            </ul>
+        </div>
+</body>
+<script>
+    /*
+        请求地址:http://wthrcdn.etouch.cn/weather_mini
+        请求方法:get
+        请求参数:city(城市名)
+        响应内容:天气信息
+
+        1. 点击回车
+        2. 查询数据
+        3. 渲染数据
+    */
+        var vue = new Vue({  
+            el:'#app',
+            data:{
+                weatherLogo:"./img/weather.png",
+                weather:[],
+                city:"",
+                fixedCity:[
+                    "北京",
+                    "上海",
+                    "广州",
+                    "深圳",
+                    "武汉",
+                    "杭州"
+                ]
+            },
+            methods:{
+                search(){
+                    var that = this
+                    axios.get("http://wthrcdn.etouch.cn/weather_mini?city="+ this.city).then(function(res){
+                        console.log(res)
+                        that.weather = res.data.data.forecast
+                        console.log(that.weather)
+
+                    },function(err){
+                        console.log(that.weather)
+                    })
+                },
+                changeCity(index){
+                    // alert(this.fixedCity[index])
+                    this.city = this.fixedCity[index]
+                    this.city.search()
+                }
+            }
+        })
+</script>
+</html>
